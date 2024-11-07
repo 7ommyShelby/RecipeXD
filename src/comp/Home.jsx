@@ -11,9 +11,9 @@ const Home = () => {
 
     const dispatch = useDispatch();
 
-    const api = import.meta.env.API
-    const appId = import.meta.env.APP_ID
-
+    const api = import.meta.env.VITE_API;
+    const appId = import.meta.env.VITE_APP_ID;
+        
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null);
