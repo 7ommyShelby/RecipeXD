@@ -19,10 +19,9 @@ const Home = () => {
     const [data, setData] = useState(null);
     const storedData = useSelector((state) => state.results)
 
-    // console.log(storedData);
 
     const searchRecipe = () => {
-        // console.log(search);
+
         setLoading(true)
         try {
             axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=${appId}&app_key=${api}`, {
@@ -32,7 +31,7 @@ const Home = () => {
                 }
             })
                 .then((e) => {
-                    // console.log(e.data.hits)
+
                     setData(e.data.hits);
                     updatedData(e.data.hits);
                     setLoading(false)
@@ -55,13 +54,29 @@ const Home = () => {
         dispatch(addData(newData))
     }
 
+    let timer;
+
+    function debounce(fun, delay) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fun()
+        }, delay);
+    }
+
+    const handleInputChange = (e) => {
+
+        console.log(e.target.value)
+        setSearch(e.target.value);
+        debounce(searchRecipe, 1000)
+    };
+
     console.log("ORIGINAL", data);
     console.log("UPDATED", storedData);
 
     return (
         <>
             <div className='w-full flex justify-center mt-3 gap-2'>
-                <input value={search} onChange={(e) => setSearch(e.target.value)} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
+                <input value={search} onKeyUp={handleInputChange} onChange={handleInputChange} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
                 <button className='bg-gray-700 px-2 py-1 rounded-xl' onClick={searchRecipe}>Search</button>
             </div>
 
