@@ -44,7 +44,6 @@ const Home = () => {
         }
     }
 
-
     const updatedData = (data) => {
 
         const newData = data.map((e) => {
@@ -53,14 +52,11 @@ const Home = () => {
                 ...e, id: id
             })
         })
-
         dispatch(addData(newData))
-
     }
 
     console.log("ORIGINAL", data);
     console.log("UPDATED", storedData);
-
 
     return (
         <>
