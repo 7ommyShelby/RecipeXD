@@ -18,10 +18,10 @@ const Home = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null);
     const storedData = useSelector((state) => state.results)
-
+    const [timer, setTimer] = useState(null);
 
     const searchRecipe = () => {
-
+        if (!search.trim()) return;
         setLoading(true)
         try {
             axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=${appId}&app_key=${api}`, {
@@ -31,11 +31,10 @@ const Home = () => {
                 }
             })
                 .then((e) => {
-
                     setData(e.data.hits);
                     updatedData(e.data.hits);
                     setLoading(false)
-                    setSearch('');
+                    // setSearch('');
                 })
                 .catch((err) => console.log(err))
         } catch (error) {
@@ -54,20 +53,23 @@ const Home = () => {
         dispatch(addData(newData))
     }
 
-    let timer;
+    const debounce = (func, delay) => {
+        return (...args) => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+            const newTimer = setTimeout(() => {
+                func(...args);
+            }, delay);
+            setTimer(newTimer);
+        };
+    };
 
-    function debounce(fun, delay) {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            fun()
-        }, delay);
-    }
+    const debouncedSearchRecipe = debounce(searchRecipe, 1000);
 
     const handleInputChange = (e) => {
-
-        console.log(e.target.value)
         setSearch(e.target.value);
-        debounce(searchRecipe, 1000)
+        debouncedSearchRecipe();
     };
 
     console.log("ORIGINAL", data);
@@ -76,7 +78,7 @@ const Home = () => {
     return (
         <>
             <div className='w-full flex justify-center mt-3 gap-2'>
-                <input value={search} onKeyUp={handleInputChange} onChange={handleInputChange} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
+                <input value={search} onChange={(e) => { handleInputChange(e) }} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
                 <button className='bg-gray-700 px-2 py-1 rounded-xl' onClick={searchRecipe}>Search</button>
             </div>
 
