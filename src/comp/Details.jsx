@@ -14,14 +14,23 @@ const Details = () => {
   const favour = useSelector((state) => state.favourites);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [dup, setDup] = useState(false);
 
   useEffect(() => {
-    !data && !favour && navigate('/')
-  }, [])
+    !data && !favour && navigate('/');
+  }, []);
+
+  const recipe = data?.find((e) => e.id === id) || favour?.find((e) => e.id === id)
+
+  useEffect(() => {
+    if (recipe) {
+      const duplicate = favour?.some((e) => e.id === recipe.id);
+      setDup(duplicate);
+    }
+  }, [recipe, favour]);
+
 
   const addtoFavourite = (id) => {
-
-    const recipe = data?.find((e) => e.id === id) || favour?.find((e) => e.id === id)
 
     const duplicate = favour.find((e) => e.id === recipe.id);
 
@@ -34,6 +43,7 @@ const Details = () => {
     }
     // localStorage.setItem("favourites", JSON.stringify(newData));
     dispatch(addFavourite(newData))
+
   }
 
   const recipeDetail = data?.find((e) => e.id === id) || favour?.find((e) => e.id === id)
@@ -41,7 +51,8 @@ const Details = () => {
   const ingredients = recipeDetail?.recipe.ingredientLines;
 
   console.log(recipeDetail);
-  console.log(favour);
+  console.log("favourite", favour);
+
   // const fav = JSON.parse(localStorage.getItem('favourites'))
   // console.log(fav);
 
@@ -58,7 +69,7 @@ const Details = () => {
                 </div>
                 <div>
                   <p className='capitalize'>Cuisine Type: {recipeDetail.recipe.cuisineType.map((e) => e + " ")}</p>
-                  <button className='bg-red-600 p-2 rounded-md' onClick={() => addtoFavourite(id)}>Add to favourites</button>
+                  <button className='bg-red-600 p-2 rounded-md' onClick={() => addtoFavourite(id)}>{dup ? "Remove from favourites" : "Add to favourites"}</button>
                 </div>
               </div>
 

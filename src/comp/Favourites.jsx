@@ -1,11 +1,13 @@
 import React from 'react'
 import Navbar from './Navbar';
 import Card from './Card';
+import { useSelector } from 'react-redux';
 
 
 const Favourites = () => {
 
-    const fav = JSON.parse(localStorage.getItem('favourites'));
+    const fav = useSelector((state) => state.favourites);
+
     console.log(fav);
 
     return (
