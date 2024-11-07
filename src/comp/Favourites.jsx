@@ -15,7 +15,7 @@ const Favourites = () => {
                 <h1>Favourties</h1>
                 <div className='flex gap-2 justify-around flex-wrap'>
                     {
-                        fav.length != 0 ? fav.map((e, idx) => {
+                        fav?.length != 0 ? fav.map((e, idx) => {
                             return (
                                 <>
                                     <Card
