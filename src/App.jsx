@@ -1,7 +1,7 @@
 import './App.css'
 import Details from './comp/Details';
 import Home from './comp/Home';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { store } from './comp/reduxtk/store';
 import { Provider } from 'react-redux';
 import Favourites from './comp/Favourites';
@@ -23,6 +23,8 @@ function App() {
   // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   // console.log(...arr);
   // myfun(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+
 
   return (
     <>

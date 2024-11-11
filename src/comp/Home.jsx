@@ -1,10 +1,9 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Card from './Card'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { addData } from './reduxtk/slice'
 import { useDispatch, useSelector } from 'react-redux'
-import Favourites from './Favourites'
 
 
 const Home = () => {
@@ -19,6 +18,7 @@ const Home = () => {
     const [data, setData] = useState(null);
     const storedData = useSelector((state) => state.results)
     const [timer, setTimer] = useState(null);
+
 
     const searchRecipe = () => {
         if (!search.trim()) return;
@@ -60,26 +60,24 @@ const Home = () => {
             }
             const newTimer = setTimeout(() => {
                 func(...args);
+                x++;
             }, delay);
             setTimer(newTimer);
         };
     };
 
-    const debouncedSearchRecipe = debounce(searchRecipe, 1000);
-
-    const handleInputChange = (e) => {
-        setSearch(e.target.value);
-        debouncedSearchRecipe();
-    };
+    const debouncedSearchRecipe = debounce(searchRecipe, 2000);
 
     console.log("ORIGINAL", data);
     console.log("UPDATED", storedData);
 
+    console.log(search);
+
     return (
         <>
             <div className='w-full flex justify-center mt-3 gap-2'>
-                <input value={search} onChange={(e) => { handleInputChange(e) }} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
-                <button className='bg-gray-700 px-2 py-1 rounded-xl' onClick={searchRecipe}>Search</button>
+                <input value={search} onKeyUp={debouncedSearchRecipe} onChange={(e) => { setSearch(e.target.value) }} className='bg-violet-900 px-2 py-1 rounded-lg w-1/2' type="text" placeholder='Enter your need...' name="" id="" />
+                {/* <button className='bg-gray-700 px-2 py-1 rounded-xl' onClick={searchRecipe}>Search</button> */}
             </div>
 
             {
